@@ -41,14 +41,24 @@ app.get("/", (req, res) => {
   res.send("Hello");
 });
 
-//app.get("/users", async (req, res) => {
-//const response = await fetch(API_URL);
-//const data = await response.json();
-//res.send(data);
-//});
-
 app.get("/users", (req, res) => {
   res.send(genmateD);
+});
+
+app.get("/users/:id", (req, res) => {
+  const currentPath = req.path; //Get current path.
+  const userId = req.params.id; //Get id from currentPath.
+  const targetId = Number(userId); //Convert id to number, because id always a string.
+
+  console.log(`Path: ${currentPath}, User ID: ${userId}`);
+
+  const targetUser = genmateD.find((item) => item.jsd_number === targetId); //Find Genmate D object that jsd_number = targetId.
+
+  if (!targetUser) {
+    return res.status(404).send(`User ${userId} not found!`); //If not found -> return error.
+  }
+
+  res.send(targetUser); //If found -> return found Genmate D object.
 });
 
 app.listen(port, () => {
